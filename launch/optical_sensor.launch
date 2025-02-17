@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find usb_cam)/launch/usb_cam.launch"/>
+
+  <node pkg="rqt_image_view" type="rqt_image_view" name="image_view"/>
+  <node pkg="robosoft" type="publish_intensity.py" name="publisher"/>
+</launch>
