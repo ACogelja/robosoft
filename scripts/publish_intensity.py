@@ -6,10 +6,15 @@ import cv2
 import numpy as np
 from sensor_msgs.msg import Image
 from robosoft.msg import Float32MultiArrayStamped
+import os
 
 class Optical_Measuring:
     def __init__(self):
         rospy.init_node('intensity_publisher', anonymous=True)
+
+        os.system("v4l2-ctl -c exposure_auto=1")
+        os.system("v4l2-ctl -c exposure_absolute=5")
+
         self. circle_positions = [(230, 288, 30), (355, 360, 30), (425, 230, 30), (300, 160, 30), (327, 258, 30)]  # (x, y, radius)
         self.bridge = CvBridge()
 
@@ -41,6 +46,8 @@ class Optical_Measuring:
             intensity_msg.header.stamp = rospy.Time.now()
             intensity_msg.data = current_intensities
             self.intensity_pub_.publish(intensity_msg)
+            # print(current_intensities)
+            # print(sum(current_intensities)/5)
 
         except CvBridgeError as e:
             rospy.logerr(f"Failed to process image: {e}")
